@@ -9,7 +9,8 @@ var persisters = (function ()
         initialize        : function ()
         {
             //            this.url = "http://localhost:18440/scripts/server/";
-            this.url = "http://localhost:3000/task-";
+//            this.url = "http://localhost:3000/task-";
+            this.url = "http://my-calndar-server-api.jit.su/task-";
         },
         /*requestTasks: function (filename, success) {
          //            var newUrl = this.url + filename + ".js";
@@ -56,7 +57,6 @@ var persisters = (function ()
             httpRequester.getJSON(newUrl,
                 function (data)
                 {
-                    console.log(JSON.stringify(data));
                     success(data);
                 },
                 function (err)
