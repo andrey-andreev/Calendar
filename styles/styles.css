@@ -1,0 +1,605 @@
+.reset, * {
+  /* remember to define focus styles! */
+  /* tables still need 'cellspacing="0"' in the markup */ }
+  .reset html, * html, .reset body, * body, .reset div, * div, .reset span, * span, .reset h1, * h1, .reset h2, * h2, .reset h3, * h3, .reset h4, * h4, .reset h5, * h5, .reset h6, * h6, .reset p, * p, .reset a, * a, .reset img, * img, .reset strong, * strong,
+  .reset dl,
+  * dl, .reset dt, * dt, .reset dd, * dd, .reset ol, * ol, .reset ul, * ul, .reset li, * li,
+  .reset fieldset,
+  * fieldset, .reset form, * form, .reset label, * label, .reset legend, * legend,
+  .reset table,
+  * table, .reset caption, * caption, .reset tbody, * tbody, .reset tfoot, * tfoot, .reset thead, * thead, .reset tr, * tr, .reset th, * th, .reset td, * td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-weight: inherit;
+    font-style: inherit;
+    font-size: 100%;
+    font-family: inherit;
+    vertical-align: baseline; }
+  .reset :focus, * :focus {
+    outline: 0; }
+  .reset ol, * ol, .reset ul, * ul {
+    list-style: none; }
+  .reset table, * table {
+    border-collapse: separate;
+    border-spacing: 0; }
+  .reset caption, * caption, .reset th, * th, .reset td, * td {
+    text-align: left;
+    font-weight: normal; }
+  .reset img, * img {
+    max-width: 100%; }
+  .reset .clearfix:after, * .clearfix:after, .reset #menu #mini-month-view .table .tr:after, #menu #mini-month-view .table .reset .tr:after, * #menu #mini-month-view .table .tr:after, #menu #mini-month-view .table * .tr:after, .reset #menu #mini-month-view .table .clearfix:after, #menu #mini-month-view .table .reset .clearfix:after, * #menu #mini-month-view .table .clearfix:after, #menu #mini-month-view .table * .clearfix:after {
+    content: "";
+    display: table;
+    clear: both; }
+
+/*variables*/
+/*mixins, functions and extends*/
+.border-box, #wrapper #logo-container #logo-bg, #wrapper #calendar, #wrapper #calendar #buttons input, #wrapper #calendar #tabs, #wrapper #calendar #tabs .ui-tabs-nav .ui-state-default a, #wrapper #calendar #tabs #agenda-view,
+#wrapper #calendar #tabs #week-view,
+#wrapper #calendar #tabs #month-view, #wrapper #calendar #tabs #agenda-view .table,
+#wrapper #calendar #tabs #week-view .table,
+#wrapper #calendar #tabs #month-view .table, #wrapper #calendar #tabs #agenda-view .table .tr .th, #wrapper #calendar #tabs #agenda-view .table .tr .td,
+#wrapper #calendar #tabs #week-view .table .tr .th,
+#wrapper #calendar #tabs #week-view .table .tr .td,
+#wrapper #calendar #tabs #month-view .table .tr .th,
+#wrapper #calendar #tabs #month-view .table .tr .td, #wrapper #calendar #tabs #agenda-view .table .tr .td .tasks,
+#wrapper #calendar #tabs #week-view .table .tr .td .tasks,
+#wrapper #calendar #tabs #month-view .table .tr .td .tasks, #wrapper #calendar #year-view, #wrapper #calendar #year-view > .table, #wrapper #calendar #year-view > .table .month, #wrapper #calendar #year-view > .table .month .table, #wrapper #calendar #year-view > .table .month .table > div:nth-of-type(2), #menu, #menu #create-task-button, #menu #mini-month-view #mini-previous-button,
+#menu #mini-month-view #mini-next-button, #menu #mini-month-view .table, .ui-dialog, .ui-dialog #create-task-form {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+
+html, body {
+  width: 100%;
+  height: 100%; }
+
+body {
+  font-size: 62.5%;
+  font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif; }
+
+#wrapper {
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  position: relative; }
+  #wrapper #mobile-menu-button {
+    display: none; }
+  #wrapper #logo-container {
+    position: fixed;
+    top: 0;
+    z-index: 1;
+    width: 100%;
+    height: 6em; }
+    #wrapper #logo-container #logo {
+      position: absolute;
+      float: left;
+      width: 18em;
+      height: 100%;
+      background: url("../img/logo.png");
+      background-size: 18em 6em;
+      background-repeat: no-repeat; }
+    #wrapper #logo-container #logo-bg {
+      margin-left: 18em;
+      width: 100%;
+      height: 100%;
+      background: url("../img/logo-bg.png");
+      background-size: 0.2em 6em;
+      background-repeat: repeat-x; }
+    #wrapper #logo-container > h1 {
+      display: none; }
+    #wrapper #logo-container h1 {
+      font-size: 3em;
+      color: #000000; }
+  #wrapper #calendar {
+    position: relative;
+    background-color: #efefef;
+    margin-left: 18em;
+    height: 100%;
+    padding: 2em; }
+    #wrapper #calendar #buttons {
+      position: absolute;
+      height: 5em;
+      top: 6em;
+      z-index: 3; }
+      #wrapper #calendar #buttons input {
+        display: inline-block;
+        font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+        font-weight: bold;
+        font-size: 1.4em;
+        width: 2em;
+        height: 2.1em;
+        margin-top: 1.5em;
+        margin-bottom: 1.5em;
+        padding-top: 0.3em;
+        padding-bottom: 0.3em;
+        text-align: center;
+        background-color: #efefef;
+        border: 1px solid #999999;
+        color: #3e454c; }
+      #wrapper #calendar #buttons input:hover {
+        background-color: #d9d9d9; }
+      #wrapper #calendar #buttons #today-button {
+        border-width: 1px 0 1px 0;
+        width: 5em; }
+    #wrapper #calendar #tabs {
+      padding: 0;
+      height: 100%;
+      padding-top: 10em; }
+      #wrapper #calendar #tabs .views {
+        padding: 0; }
+      #wrapper #calendar #tabs .ui-tabs-nav {
+        width: 18em;
+        top: 29em;
+        position: absolute;
+        left: -20.2em;
+        z-index: 3; }
+        #wrapper #calendar #tabs .ui-tabs-nav .ui-state-default {
+          width: 18em;
+          padding: 0; }
+          #wrapper #calendar #tabs .ui-tabs-nav .ui-state-default a {
+            color: #efefef;
+            font-size: 2em;
+            width: 100%;
+            text-align: right; }
+          #wrapper #calendar #tabs .ui-tabs-nav .ui-state-default a:hover {
+            color: #d9d9d9;
+            background-color: rgba(216, 218, 219, 0.15); }
+        #wrapper #calendar #tabs .ui-tabs-nav .ui-tabs-active {
+          background-color: #efefef; }
+          #wrapper #calendar #tabs .ui-tabs-nav .ui-tabs-active a {
+            color: #f26522; }
+          #wrapper #calendar #tabs .ui-tabs-nav .ui-tabs-active a:hover {
+            color: #f26522;
+            background-color: rgba(216, 218, 219, 0.5); }
+      #wrapper #calendar #tabs #agenda-view,
+      #wrapper #calendar #tabs #week-view,
+      #wrapper #calendar #tabs #month-view {
+        color: #3e454c;
+        height: 100%; }
+        #wrapper #calendar #tabs #agenda-view .table,
+        #wrapper #calendar #tabs #week-view .table,
+        #wrapper #calendar #tabs #month-view .table {
+          font-size: 1.8em;
+          height: 100%; }
+          #wrapper #calendar #tabs #agenda-view .table .tr .th, #wrapper #calendar #tabs #agenda-view .table .tr .td,
+          #wrapper #calendar #tabs #week-view .table .tr .th,
+          #wrapper #calendar #tabs #week-view .table .tr .td,
+          #wrapper #calendar #tabs #month-view .table .tr .th,
+          #wrapper #calendar #tabs #month-view .table .tr .td {
+            border: 1px #efefef solid;
+            display: inline-block;
+            width: 14.28571%; }
+          #wrapper #calendar #tabs #agenda-view .table .tr .th,
+          #wrapper #calendar #tabs #week-view .table .tr .th,
+          #wrapper #calendar #tabs #month-view .table .tr .th {
+            height: 4%;
+            text-align: right; }
+          #wrapper #calendar #tabs #agenda-view .table .tr .td,
+          #wrapper #calendar #tabs #week-view .table .tr .td,
+          #wrapper #calendar #tabs #month-view .table .tr .td {
+            overflow: hidden;
+            background-color: #d9d9d9;
+            height: 100%;
+            padding: 0em 0.2em 0.2em 0.2em; }
+            #wrapper #calendar #tabs #agenda-view .table .tr .td .tasks,
+            #wrapper #calendar #tabs #week-view .table .tr .td .tasks,
+            #wrapper #calendar #tabs #month-view .table .tr .td .tasks {
+              position: relative;
+              overflow: hidden;
+              display: inline-block;
+              width: 100%;
+              font-size: 0.8em;
+              cursor: pointer;
+              /*border-width: 1px;
+              border-style: solid;
+              border-color: rgba($color, 0.6);*/
+              color: #efefef;
+              background-color: rgba(62, 69, 76, 0.6); }
+              #wrapper #calendar #tabs #agenda-view .table .tr .td .tasks:hover,
+              #wrapper #calendar #tabs #week-view .table .tr .td .tasks:hover,
+              #wrapper #calendar #tabs #month-view .table .tr .td .tasks:hover {
+                background-color: rgba(62, 69, 76, 0.8); }
+              #wrapper #calendar #tabs #agenda-view .table .tr .td .tasks p,
+              #wrapper #calendar #tabs #week-view .table .tr .td .tasks p,
+              #wrapper #calendar #tabs #month-view .table .tr .td .tasks p {
+                margin: 0 0.3em 0 0.3em;
+                overflow: hidden;
+                text-overflow: ellipsis; }
+              #wrapper #calendar #tabs #agenda-view .table .tr .td .tasks .task-name,
+              #wrapper #calendar #tabs #week-view .table .tr .td .tasks .task-name,
+              #wrapper #calendar #tabs #month-view .table .tr .td .tasks .task-name {
+                width: 85%;
+                text-align: left;
+                white-space: nowrap;
+                text-overflow: ellipsis; }
+              #wrapper #calendar #tabs #agenda-view .table .tr .td .tasks .task-note,
+              #wrapper #calendar #tabs #week-view .table .tr .td .tasks .task-note,
+              #wrapper #calendar #tabs #month-view .table .tr .td .tasks .task-note {
+                display: none; }
+              #wrapper #calendar #tabs #agenda-view .table .tr .td .tasks .task-close-button,
+              #wrapper #calendar #tabs #week-view .table .tr .td .tasks .task-close-button,
+              #wrapper #calendar #tabs #month-view .table .tr .td .tasks .task-close-button {
+                /*z-index: 15;*/
+                width: 12%;
+                position: absolute;
+                right: 0.2em;
+                top: 0.2em;
+                text-align: center;
+                font-size: 0.8em;
+                display: inline-block; }
+                #wrapper #calendar #tabs #agenda-view .table .tr .td .tasks .task-close-button:hover,
+                #wrapper #calendar #tabs #week-view .table .tr .td .tasks .task-close-button:hover,
+                #wrapper #calendar #tabs #month-view .table .tr .td .tasks .task-close-button:hover {
+                  background-color: rgba(0, 0, 0, 0.1); }
+            #wrapper #calendar #tabs #agenda-view .table .tr .td .sport,
+            #wrapper #calendar #tabs #week-view .table .tr .td .sport,
+            #wrapper #calendar #tabs #month-view .table .tr .td .sport {
+              /*border-width: 1px;
+              border-style: solid;
+              border-color: rgba($color, 0.6);*/
+              color: #efefef;
+              background-color: rgba(117, 242, 34, 0.6); }
+              #wrapper #calendar #tabs #agenda-view .table .tr .td .sport:hover,
+              #wrapper #calendar #tabs #week-view .table .tr .td .sport:hover,
+              #wrapper #calendar #tabs #month-view .table .tr .td .sport:hover {
+                background-color: rgba(117, 242, 34, 0.8); }
+            #wrapper #calendar #tabs #agenda-view .table .tr .td .social,
+            #wrapper #calendar #tabs #week-view .table .tr .td .social,
+            #wrapper #calendar #tabs #month-view .table .tr .td .social {
+              /*border-width: 1px;
+              border-style: solid;
+              border-color: rgba($color, 0.6);*/
+              color: #efefef;
+              background-color: rgba(34, 62, 242, 0.6); }
+              #wrapper #calendar #tabs #agenda-view .table .tr .td .social:hover,
+              #wrapper #calendar #tabs #week-view .table .tr .td .social:hover,
+              #wrapper #calendar #tabs #month-view .table .tr .td .social:hover {
+                background-color: rgba(34, 62, 242, 0.8); }
+            #wrapper #calendar #tabs #agenda-view .table .tr .td .work,
+            #wrapper #calendar #tabs #week-view .table .tr .td .work,
+            #wrapper #calendar #tabs #month-view .table .tr .td .work {
+              /*border-width: 1px;
+              border-style: solid;
+              border-color: rgba($color, 0.6);*/
+              color: #efefef;
+              background-color: rgba(242, 34, 34, 0.6); }
+              #wrapper #calendar #tabs #agenda-view .table .tr .td .work:hover,
+              #wrapper #calendar #tabs #week-view .table .tr .td .work:hover,
+              #wrapper #calendar #tabs #month-view .table .tr .td .work:hover {
+                background-color: rgba(242, 34, 34, 0.8); }
+      #wrapper #calendar #tabs #agenda-view .table .tr:nth-of-type(2),
+      #wrapper #calendar #tabs #week-view .table .tr:nth-of-type(2) {
+        height: 96%; }
+        #wrapper #calendar #tabs #agenda-view .table .tr:nth-of-type(2) .td,
+        #wrapper #calendar #tabs #week-view .table .tr:nth-of-type(2) .td {
+          padding-top: 0.2em; }
+    #wrapper #calendar #tabs #month-view div.table .caption {
+      text-align: right;
+      height: 4%; }
+    #wrapper #calendar #tabs #month-view div.table div.tr {
+      height: 15.33333%; }
+      #wrapper #calendar #tabs #month-view div.table div.tr .th {
+        background-color: #e1e1e1; }
+      #wrapper #calendar #tabs #month-view div.table div.tr .td {
+        overflow: hidden;
+        display: inline-block; }
+        #wrapper #calendar #tabs #month-view div.table div.tr .td > p {
+          height: 1.2em;
+          text-align: right; }
+      #wrapper #calendar #tabs #month-view div.table div.tr .mini-current-month:nth-of-type(6), #wrapper #calendar #tabs #month-view div.table div.tr .mini-current-month:nth-of-type(7) {
+        color: #f26522; }
+      #wrapper #calendar #tabs #month-view div.table div.tr div.today {
+        background-color: rgba(153, 153, 153, 0.5);
+        background-color: rgba(62, 69, 76, 0.5);
+        color: #efefef; }
+    #wrapper #calendar #tabs #month-view div.table div.mini-other-month {
+      color: #efefef; }
+    #wrapper #calendar #tabs #month-view div.table div:nth-of-type(2) {
+      height: 4%; }
+    #wrapper #calendar #year-view {
+      color: #3e454c;
+      height: 100%; }
+      #wrapper #calendar #year-view .today p {
+        background-color: #999999;
+        font-weight: bolder; }
+      #wrapper #calendar #year-view > .table {
+        font-size: 1.8em;
+        height: 100%; }
+        #wrapper #calendar #year-view > .table .month {
+          margin: 0.5%;
+          width: 24%;
+          height: 32.33333%;
+          display: inline-block; }
+          #wrapper #calendar #year-view > .table .month .table {
+            /*padding: 3%;*/
+            width: 100%;
+            height: 100%;
+            background-color: #d9d9d9; }
+            #wrapper #calendar #year-view > .table .month .table .caption {
+              text-align: center;
+              background-color: #efefef;
+              font-weight: bold; }
+            #wrapper #calendar #year-view > .table .month .table > .tr {
+              height: 12.5%;
+              margin: 0 3% 0 3%; }
+              #wrapper #calendar #year-view > .table .month .table > .tr .th, #wrapper #calendar #year-view > .table .month .table > .tr .td {
+                display: inline-block;
+                width: 14.28571%;
+                height: 100%;
+                text-align: center;
+                vertical-align: middle; }
+              #wrapper #calendar #year-view > .table .month .table > .tr div.td.mini-current-month p:hover {
+                background-color: #999999;
+                color: #efefef; }
+              #wrapper #calendar #year-view > .table .month .table > .tr .th:nth-of-type(6n), #wrapper #calendar #year-view > .table .month .table > .tr .th:nth-of-type(7n),
+              #wrapper #calendar #year-view > .table .month .table > .tr .td:nth-of-type(6n), #wrapper #calendar #year-view > .table .month .table > .tr .td:nth-of-type(7n) {
+                color: #f26522; }
+              #wrapper #calendar #year-view > .table .month .table > .tr div.td.mini-other-month {
+                color: #efefef; }
+              #wrapper #calendar #year-view > .table .month .table > .tr .td p {
+                margin: 0.05em; }
+              #wrapper #calendar #year-view > .table .month .table > .tr .got-task p {
+                background-color: #efefef;
+                color: #3e454c;
+                /*background-color: $c-medium-gray;
+                color: $c-white;*/ }
+              #wrapper #calendar #year-view > .table .month .table > .tr .today p {
+                background-color: #f26522;
+                color: #efefef; }
+            #wrapper #calendar #year-view > .table .month .table > div:nth-of-type(1) {
+              font-weight: bold; }
+            #wrapper #calendar #year-view > .table .month .table > div:nth-of-type(2) {
+              font-weight: bold;
+              border-bottom: 1px solid #3e454c; }
+
+#menu {
+  background-color: #3e454c;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 18em;
+  height: 100%;
+  padding: 0.5em;
+  padding-top: 6em;
+  box-shadow: 0.2em 0 1em #3e454c; }
+  #menu #create-task-button {
+    font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif;
+    font-weight: bold;
+    font-size: 1.4em;
+    width: 100%;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    padding-top: 0.3em;
+    padding-bottom: 0.3em;
+    background-color: #efefef;
+    border: 1px solid #999999;
+    color: #3e454c; }
+  #menu #create-task-button:hover {
+    background-color: #e1e1e1; }
+  #menu #mini-month-view {
+    color: #efefef;
+    font-size: 1.4em;
+    position: relative; }
+    #menu #mini-month-view .tasks {
+      display: none; }
+    #menu #mini-month-view #mini-previous-button,
+    #menu #mini-month-view #mini-next-button {
+      position: absolute;
+      font-size: 1em;
+      width: 16%;
+      height: 14%;
+      color: #efefef;
+      background-color: transparent;
+      font-weight: bold;
+      /*border: 1px solid $c-white;*/
+      border: none; }
+    #menu #mini-month-view #mini-previous-button:hover,
+    #menu #mini-month-view #mini-next-button:hover {
+      background-color: #efefef;
+      color: #3e454c; }
+    #menu #mini-month-view #mini-previous-button {
+      left: 0; }
+    #menu #mini-month-view #mini-next-button {
+      right: 0; }
+    #menu #mini-month-view .table {
+      width: 100%; }
+      #menu #mini-month-view .table .tr {
+        width: 100%; }
+      #menu #mini-month-view .table .caption, #menu #mini-month-view .table .th, #menu #mini-month-view .table .td {
+        text-align: center; }
+      #menu #mini-month-view .table .th, #menu #mini-month-view .table .td {
+        float: left;
+        width: 14.28571%; }
+      #menu #mini-month-view .table .caption {
+        margin-bottom: 0.5em;
+        background-color: #3e454c;
+        color: #efefef;
+        font-weight: bold; }
+      #menu #mini-month-view .table .th {
+        border-bottom: 1px solid #efefef;
+        background-color: #3e454c;
+        color: #efefef;
+        font-weight: bold; }
+      #menu #mini-month-view .table .th:nth-of-type(6n),
+      #menu #mini-month-view .table .th:nth-of-type(7n),
+      #menu #mini-month-view .table .td:nth-of-type(6n),
+      #menu #mini-month-view .table .td:nth-of-type(7n) {
+        color: #f26522; }
+      #menu #mini-month-view .table .td.mini-other-month {
+        color: #999999; }
+      #menu #mini-month-view .table .td.mini-month-hover:hover p {
+        background-color: #efefef;
+        color: #3e454c; }
+      #menu #mini-month-view .table .td p {
+        margin: 0.05em; }
+      #menu #mini-month-view .table .got-task p {
+        background-color: #efefef;
+        color: #3e454c;
+        /*background-color: $c-medium-gray;
+        color: $c-white;*/ }
+      #menu #mini-month-view .table .today p {
+        background-color: #f26522;
+        color: #efefef; }
+
+.ui-dialog {
+  padding: 0;
+  border: 1px solid #3e454c;
+  font-size: 16px;
+  background-color: #efefef;
+  color: #3e454c;
+  box-shadow: 0px 0px 25px black; }
+  .ui-dialog .ui-button {
+    width: 50px;
+    height: 28px; }
+  .ui-dialog .ui-button-text {
+    font-size: 12px;
+    color: #3e454c;
+    text-indent: 0; }
+  .ui-dialog #create-task-form hr {
+    clear: both;
+    visibility: hidden; }
+  .ui-dialog #create-task-form p {
+    display: inline-block; }
+  .ui-dialog #create-task-form input, .ui-dialog #create-task-form select {
+    float: right;
+    width: 140px; }
+  .ui-dialog #create-task-form textarea {
+    width: 98%;
+    height: 90px;
+    resize: none;
+    overflow: auto; }
+  .ui-dialog #create-task-form input[type=button] {
+    width: 100%;
+    padding: 3%;
+    display: inline-block;
+    font-size: 1em;
+    border: none;
+    font-weight: bold;
+    background-color: #3e454c;
+    color: #efefef; }
+    .ui-dialog #create-task-form input[type=button]:hover {
+      background-color: #999999; }
+  .ui-dialog #create-task-form #form-save-button {
+    width: 48%;
+    float: left; }
+  .ui-dialog #create-task-form #form-delete-button {
+    width: 48%;
+    float: right; }
+
+#ui-datepicker-div {
+  font-size: 1.2em;
+  border: 1px solid #3e454c;
+  background-color: #efefef;
+  color: #3e454c;
+  box-shadow: 0px 0px 25px black; }
+  #ui-datepicker-div .ui-datepicker-prev span,
+  #ui-datepicker-div .ui-datepicker-next span {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    left: 0;
+    font-size: 3em;
+    color: #efefef;
+    background-color: #3e454c; }
+  #ui-datepicker-div .ui-datepicker-today {
+    background-color: #3e454c; }
+    #ui-datepicker-div .ui-datepicker-today a {
+      color: #efefef;
+      font-weight: bold; }
+  #ui-datepicker-div a {
+    color: #3e454c;
+    text-align: center; }
+  #ui-datepicker-div th {
+    border-bottom: 1px solid #3e454c; }
+  #ui-datepicker-div .ui-datepicker-title {
+    font-weight: bold; }
+  #ui-datepicker-div button {
+    background-color: #3e454c;
+    color: #efefef;
+    font-weight: bold;
+    border: none; }
+    #ui-datepicker-div button:hover {
+      background-color: #999999; }
+
+/*media queries*/
+@media only screen and (max-width: 1024px) {
+  body {
+    font-size: 53.33333%; } }
+@media only screen and (max-width: 960px) {
+  body {
+    font-size: 50%; } }
+@media only screen and (max-width: 780px) {
+  body {
+    font-size: 40.625%; } }
+@media only screen and (max-width: 640px) {
+  body {
+    font-size: 33.33333%; }
+    body #wrapper #menu, body #wrapper .ui-tabs-nav, body #wrapper #mini-month-view {
+      display: none; }
+    body #wrapper #menu {
+      width: 100%;
+      height: 100%;
+      z-index: 4;
+      padding-left: 0;
+      padding-right: 0; }
+      body #wrapper #menu #create-task-button {
+        font-size: 3em;
+        height: 3em;
+        width: 100%; }
+    body #wrapper #logo-container {
+      background-color: #3e454c;
+      height: 7.2em;
+      z-index: 6; }
+      body #wrapper #logo-container #logo, body #wrapper #logo-container #logo-bg {
+        background-position: center bottom;
+        z-index: 7; }
+    body #wrapper #mobile-menu-button {
+      display: block;
+      width: 40px;
+      height: 40px;
+      background-color: transparent;
+      color: #f26522;
+      border: none;
+      z-index: 8;
+      position: absolute;
+      top: 0;
+      right: 0;
+      font-size: 25px;
+      font-weight: bolder; }
+    body #wrapper div#calendar {
+      padding-left: 0;
+      padding-right: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding-top: 0; }
+      body #wrapper div#calendar div#tabs {
+        display: block;
+        width: 100%; }
+        body #wrapper div#calendar div#tabs ul.ui-tabs-nav {
+          z-index: 10;
+          top: 21em;
+          left: 0;
+          width: 100%; }
+          body #wrapper div#calendar div#tabs ul.ui-tabs-nav li.ui-state-default {
+            width: 100%;
+            /*height: 5em;*/
+            font-size: 1.8em;
+            border-top: 1px dotted #f26522; }
+            body #wrapper div#calendar div#tabs ul.ui-tabs-nav li.ui-state-default:last-child {
+              border-bottom: 1px dotted #f26522; }
+            body #wrapper div#calendar div#tabs ul.ui-tabs-nav li.ui-state-default a {
+              text-align: center; } }
+@media only screen and (max-width: 480px) {
+  body {
+    font-size: 25%; } }
+@media only screen and (max-width: 320px) {
+  body {
+    font-size: 16.66667%; } }
+
+/*# sourceMappingURL=styles.css.map */
