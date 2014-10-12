@@ -24,12 +24,11 @@ The Calendar server currently runs on nodejs v0.10.31 and requires the latest ve
 express
 mongodb
 ```
-This is not the last version of the server, it's still in the process of debugging.
+This is not the last version of the server. The agenda functionality doesn't work properly and it's in the process of debugging.
 
 ### Client documentation
 
 * To run the Calendar application there are two possible ways :
-
 In the file "persister.js" there are two urls:
   - first one is for the online server url: "http://my-calendar.jit.su/task-"
 
