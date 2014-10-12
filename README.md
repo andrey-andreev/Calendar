@@ -24,7 +24,7 @@ The Calendar server currently runs on nodejs v0.10.31 and requires the latest ve
 express
 mongodb
 ```
-This is not the last version of the server site, it's still in the process of debugging.
+This is not the last version of the server, it's still in the process of debugging.
 
 ### Client documentation
 
