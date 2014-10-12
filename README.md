@@ -30,17 +30,17 @@ This is not the last version of the server, it's still in the process of debuggi
 
 * To run the Calendar application there are two possible ways :
 
-Open the file "persister.js" there are two urls:
- - first one is for the online server url: "http://my-calendar.jit.su/task-"
+In the file "persister.js" there are two urls:
+  - first one is for the online server url: "http://my-calendar.jit.su/task-"
 
 In order to run the Calendar through the online server : start the index.html
 
- - local server url: "http://localhost:3000/task-"
+  - local server url: "http://localhost:3000/task-"
 
 In order to run the Calendar through the local server type: node server.js
  
 * Support the following browsers:
- - Chrome
- - Firefox
- - IE 10+
- - Opera
+  - Chrome
+  - Firefox
+  - IE 10+
+  - Opera
