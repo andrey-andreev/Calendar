@@ -34,9 +34,3 @@ This is not the last version of the server. The agenda functionality doesn't wor
   - first option is through the online server, in that case you have to download only the folder "client" and index.html and start the index.html.
 
   - in second option you have to download the folder "server" too, in the file "persister.js"  you have to uncomment this url: "http://localhost:3000/task-" and comment this url: "http://my-calendar.jit.su/task-". Then type: node server.js to start the server and start the index.html to run the application.
- 
-* Support the following browsers:
-  - Chrome
-  - Firefox
-  - IE 10+
-  - Opera
