@@ -18,15 +18,14 @@ Calendar is a HTML5/JavaScript web application.
 
 ### Server documentation 
 
-The Calendar server currently runs on nodejs v0.10.31 and requires the latest versions of the following npm libraries: 
+* The Calendar server currently runs on nodejs v0.10.31 and requires the latest versions of the following npm libraries: 
 
-```
-express
-mongoskin
-async
-underscore
-```
-This is not the last version of the server. The agenda functionality doesn't work properly and it's in the process of debugging.
+  - express
+  - mongoskin
+  - async
+  - underscore
+
+* This is not the last version of the server. The agenda functionality doesn't work properly and it's in the process of debugging.
 
 ### Client documentation
 
