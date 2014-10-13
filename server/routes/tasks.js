@@ -83,6 +83,23 @@ var tasks = {
         }
     },
 
+    removeFromTaskMapping: function (day, month, year)
+    {
+        var index;
+        var deletedTask = _.find(taskMapping, function (task, currentIndex)
+        {
+            if (task.day == day && task.month == month && task.year == year)
+            {
+                index = currentIndex;
+                return true;
+            }
+        });
+        if (index)
+        {
+            taskMapping.splice(index, 1);
+        }
+    },
+
     rebuildTaskMapping: function ()
     {
         taskCollection.find({}, {year: 1, month: 1, day: 1, _id: 0}).sort({"year": 1, "month": 1, "day": 1}).toArray(function (err, results)
@@ -116,7 +133,7 @@ var tasks = {
             return res.status(500).send({ error: 'INVALID YEAR: GO BACK TO THE PRESENT' });
         }
 
-        taskCollection.find({year: year}).sort({month: 1, day: 1}).toArray(function (err, results)
+        taskCollection.find({year: year}, {fields: {day: 1, month: 1, year: 1, _id: 0}}).toArray(function (err, results)
         {
             if (err)
             {
@@ -141,8 +158,7 @@ var tasks = {
             return res.status(500).send({ error: 'INVALID YEAR: GO BACK TO THE PRESENT' });
         }
 
-        /*taskCollection.find({year: year, month: month}, {sort: {day: 1}, fields: {name: 1, day : 1, month: 1, year: 1, category: 1}}).toArray(function (err, results)*/
-        taskCollection.find({year: year, month: month}, {sort: {day: 1}}).toArray(function (err, results)
+        taskCollection.find({year: year, month: month}).toArray(function (err, results)
         {
             if (err)
             {
@@ -177,19 +193,18 @@ var tasks = {
         var currentDate = new Date(year, month - 1, day);
         var week = tasks.getWeekNumber(currentDate);
 
-        taskCollection.find({week: week}).sort({year: 1, month: 1, day: 1})
-            .toArray(function (err, results)
+        taskCollection.find({week: week}).toArray(function (err, results)
+        {
+            if (err)
             {
-                if (err)
-                {
-                    return res.send(err);
-                }
+                return res.send(err);
+            }
 
-                return res.send(results);
-            })
+            return res.send(results);
+        })
     },
 
-    getById    : function (req, res)
+    getById: function (req, res)
     {
         var id = req.params.id;
         var objectId = new ObjectID(id);
@@ -205,8 +220,28 @@ var tasks = {
         })
     },
 
+    addDatesForAgenda: function (dates, startTaskIndex, futureTasks)
+    {
+        if (futureTasks)
+        {
+            var len = (taskMapping.length <= (startTaskIndex + 6)) ? taskMapping.length : (startTaskIndex + 7);
+            for (var i = startTaskIndex; i < len; i++)
+            {
+                dates.push(taskMapping[i]);
+            }
+        }
+        else
+        {
+            var len = (0 >= (startTaskIndex - 6)) ? 0 : (startTaskIndex - 7);
+            for (var i = startTaskIndex; i > len; i--)
+            {
+                dates.push(taskMapping[i]);
+            }
+        }
+    },
+
     //todo: fix projection
-    getByAgenda: function (req, res)
+    getByAgenda      : function (req, res)
     {
         var year = parseInt(req.params.year);
         if (!tasks.isValidYear(year))
@@ -226,6 +261,8 @@ var tasks = {
             return res.status(500).send({ error: 'INVALID DAY' });
         }
 
+        //if passed flag is equal to 'true', we set variable to be equal to true, otherwise to false
+        var futureTasks = req.params.flag == 'true';
         var dates = [];
         //todo -optimization: merge addInTaskMapping and code below
         //return tasks for current date if there are any or first day that have tasks + return next 6 days that have tasks
@@ -234,11 +271,7 @@ var tasks = {
         {
             //get next six days that have task
             var index = _.indexOf(taskMapping, firstDay);
-            var len = (taskMapping.length<(index+6))? taskMapping.length : (index+7);
-            for (var i = index; i < len; i++)
-            {
-                dates.push(taskMapping[i]);
-            }
+            tasks.addDatesForAgenda(dates, index, futureTasks);
         }
         else
         {
@@ -253,20 +286,12 @@ var tasks = {
                 if (firstDay)
                 {
                     var index = _.indexOf(taskMapping, firstDay);
-                    var len = (taskMapping.length<(index+6))? taskMapping.length : (index+7);
-                    for (var i = index; i < len; i++)
-                    {
-                        dates.push(taskMapping[i]);
-                    }
+                    tasks.addDatesForAgenda(dates, index, futureTasks);
                 }
                 else
                 {
                     var index = _.indexOf(taskMapping, currentMonth[currentMonth.length - 1]) + 1;
-                    var len = (taskMapping.length<(index+6))? taskMapping.length : (index+7);
-                    for (var i = index; i < len; i++)
-                    {
-                        dates.push(taskMapping[i]);
-                    }
+                    tasks.addDatesForAgenda(dates, index, futureTasks);
                 }
             }
             else
@@ -282,20 +307,12 @@ var tasks = {
                     if (firstMonth)
                     {
                         var index = _.indexOf(taskMapping, firstMonth);
-                        var len = (taskMapping.length<(index+6))? taskMapping.length : (index+7);
-                        for (var i = index; i < len; i++)
-                        {
-                            dates.push(taskMapping[i]);
-                        }
+                        tasks.addDatesForAgenda(dates, index, futureTasks);
                     }
                     else
                     {
                         var index = _.indexOf(taskMapping, currentYear[currentYear.length - 1]) + 1;
-                        var len = (taskMapping.length<(index+6))? taskMapping.length : (index+7);
-                        for (var i = index; i < len; i++)
-                        {
-                            dates.push(taskMapping[i]);
-                        }
+                        tasks.addDatesForAgenda(dates, index, futureTasks);
                     }
                 }
                 else
@@ -308,38 +325,47 @@ var tasks = {
                     if (firstYear)
                     {
                         var index = _.indexOf(taskMapping, firstYear);
-                        var len = (taskMapping.length<(index+6))? taskMapping.length : (index+7);
-                        for (var i = index; i < len; i++)
-                        {
-                            dates.push(taskMapping[i]);
-                        }
+                        tasks.addDatesForAgenda(dates, index, futureTasks);
                     }
                 }
             }
         }
 
-        var allTasks = [];
-        async.eachSeries(dates, function (date, callback)
+        var allTasks = {};
+        if (dates.length > 0)
         {
-            tasks.getByDay(date.day, date.month, date.year, function (err, results)
+            if (!futureTasks)
+            {
+                dates = dates.reverse();
+            }
+
+            async.eachSeries(dates, function (date, callback)
+            {
+                tasks.getByDay(date.day, date.month, date.year, function (err, results)
+                {
+                    if (err)
+                    {
+                        return callback(err);
+                    }
+                    var dateStr = date.day + '-' + date.month + '-' + date.year;
+                    allTasks[dateStr] = results;
+                    callback();
+                })
+            }, function (err)
             {
                 if (err)
                 {
-                    return callback(err);
+                    res.send(err);
                 }
-                allTasks = allTasks.concat(results);
-                callback();
-            })
-        }, function (err)
-        {
-            if (err)
-            {
-                res.send(err);
-            }
 
-            //todo: check if results are ordered in the right way
+                //todo: check if results are ordered in the right way
+                res.send(allTasks);
+            })
+        }
+        else
+        {
             res.send(allTasks);
-        })
+        }
     },
 
     getByDay: function (day, month, year, callback)
@@ -407,7 +433,9 @@ var tasks = {
         var id = req.params.id;
         var objectId = new ObjectID(id);
 
-        taskCollection.findAndModify({_id: objectId},[['_id', 1]], {$set: req.body}, {new:true}, function (err, result)
+        taskCollection.findAndModify({_id: objectId}, [
+            ['_id', 1]
+        ], {$set: req.body}, {new: true}, function (err, result)
         {
             if (err)
             {
@@ -422,14 +450,18 @@ var tasks = {
     {
         var id = req.params.id;
         var objectId = new ObjectID(id);
-        taskCollection.remove({_id: objectId}, function (err, result)
+        taskCollection.findAndRemove({_id: objectId}, [
+            ['_id', 1]
+        ], function (err, result)
         {
             if (err)
             {
                 return res.send(err);
             }
 
-            return res.send((result === 1) ? {msg: 'success'} : {err: 'error'})
+            //remove deleted task from taskMapping
+            tasks.removeFromTaskMapping(result.day, result.month, result.year);
+            return res.send({msg: 'success'});
         })
     },
 

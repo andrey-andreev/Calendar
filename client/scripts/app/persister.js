@@ -8,21 +8,9 @@ var persisters = (function ()
     var MainPersister = Class.create({
         initialize        : function ()
         {
-            //            this.url = "http://localhost:18440/scripts/server/";
-//            this.url = "http://localhost:3000/task-";
-            this.url = "http://my-calndar-server-api.jit.su/task-";
+            this.url = "http://my-calendar.jit.su/task-";
+            /*this.url = "http://localhost:3000/task-";*/
         },
-        /*requestTasks: function (filename, success) {
-         //            var newUrl = this.url + filename + ".js";
-         httpRequester.getJSON(this.url,
-         function (data) {
-         success(data);
-         },
-         function (err) {
-         console.log("Error: ", err);
-         //error(err);
-         });
-         },*/
         requestTasksByYear: function (currentDate, success)
         {
             var newUrl = this.url + 'by-year/' + currentDate.getFullYear();
@@ -65,9 +53,9 @@ var persisters = (function ()
                     //error(err);
                 });
         },
-        requestTasksByAgenda: function (currentDate, success)
+        requestTasksByAgenda: function (currentDate, futureTasksBool, success)
         {
-            var newUrl = this.url + 'by-agenda/' + currentDate.getFullYear() + '/' + (currentDate.getMonth() + 1) + '/' + currentDate.getDate();
+            var newUrl = this.url + 'by-agenda/' + currentDate.getFullYear() + '/' + (currentDate.getMonth() + 1) + '/' + currentDate.getDate() + '/' + futureTasksBool;
             httpRequester.getJSON(newUrl,
                 function (data)
                 {

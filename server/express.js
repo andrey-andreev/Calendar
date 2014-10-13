@@ -7,10 +7,33 @@ var app = express();
 // allow server to be called from different domain
 var allowCrossDomain = function (req, res, next)
 {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    if (req.method.toUpperCase() === "OPTIONS")
+    {
+        // Echo back the Origin (calling domain) so that the
+        // client is granted access to make subsequent requests
+        // to the API.
+        res.writeHead(
+            "204",
+            "No Content",
+            {
+                "access-control-allow-origin" : '*',
+                "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+                "access-control-allow-headers": "content-type, accept",
+                "access-control-max-age"      : 10, // Seconds.
+                "content-length"              : 0
+            }
+        );
 
+        // End the response - we're not sending back any content.
+        return( res.end() );
+
+    }
+    else
+    {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+        res.header('Access-Control-Allow-Headers', 'Content-Type');
+    }
     next();
 }
 
@@ -26,7 +49,7 @@ app.get('/', function (req, res)
 app.get('/task-by-year/:year', tasks.getByYear);
 app.get('/task-by-month/:year/:month', tasks.getByMonth);
 app.get('/task-by-week/:year/:month/:day', tasks.getByWeek);
-app.get('/task-by-agenda/:year/:month/:day', tasks.getByAgenda);
+app.get('/task-by-agenda/:year/:month/:day/:flag', tasks.getByAgenda);
 app.get('/task-single/:id', tasks.getById);
 app.post('/task-add', tasks.add);
 app.post('/task-edit/:id', tasks.update);

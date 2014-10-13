@@ -43,13 +43,17 @@ var ui = (function () {
             '</div>';
     }
 
-    function buildTask(task) {
-        var html =
-         '<div class="tasks ' + task.category + '" ' + 'id="' + task._id + '">' +
-                '<p class="task-name">' + task.name + '</p>' +
-                '<p class="task-note">' + task.notes + '</p>' +
-                '<a class="task-close-button">X</a>' +
-         '</div>';
+    function buildTask(tasks) {
+        var html = '';
+        for(var i = 0; i < tasks.length; i++){
+            var curTask = tasks[i];
+            html +=
+             '<div class="tasks ' + curTask.category + '" ' + 'id="' + curTask._id + '">' +
+                    '<p class="task-name">' + curTask.name + '</p>' +
+                    '<p class="task-note">' + curTask.notes + '</p>' +
+                    '<a class="task-close-button">X</a>' +
+             '</div>';
+        }
 
         return html;
     }
@@ -60,12 +64,11 @@ var ui = (function () {
         if (weekDay === 0) {
             weekDay = 6;
         }
-        monday.setDate(currentDate.getDate() - weekDay + 1);
+        monday.setDate(currentDate.getDate() - weekDay);
 
         return monday;
     }
 
-    // TODO: create new task pop-up
     function buildNewTaskPopup() {
         var html =
         '<form id="create-task-form">' +
@@ -77,7 +80,7 @@ var ui = (function () {
         var length = Object.keys(CategoryType).length;
         for(var i = 0; i < length; i++){
             html += '<option value="' + CategoryType[i].toLowerCase() + '">' + CategoryType[i] + '</option>';
-        };
+        }
         html +=
         '</select><hr/>' +
         '<textarea id="form-notes" name="notes" maxlength="200" >Enter some notes here...</textarea>' +
@@ -87,14 +90,13 @@ var ui = (function () {
         return html;
     }
 
-    // TODO: generate week view
-    function buildWeekView(currentDate, tasks) {
+    function buildWeekView(currentDate) {
         var monday = getFirstWeekDay(currentDate);
         var html = '<div class="table">' +
             '<div class="tr">';
         for (var col = 0; col < weekDaysNames.length; col++) {
             html += '<div class="th">' +
-                weekDaysNames[col].slice(0, 3) + '  ' +
+                weekDaysNamesFirstThreeLetters[col] + '  ' +
                 ('0' + monday.getDate()).slice(-2) + '.' +  //add leading zero
                 ('0' + (monday.getMonth() + 1)).slice(-2) + '.' + //add leading zero
                 monday.getFullYear().toString().slice(-2) +
@@ -103,7 +105,7 @@ var ui = (function () {
         }
         html += '</div>' +
             '<div class="tr">';
-        var counter = 0;
+
         var currentDay = getFirstWeekDay(currentDate);
         for (var i = 0; i < weekDaysNames.length; i++) {
             html += '<div class="td ' +
@@ -111,14 +113,7 @@ var ui = (function () {
                 (currentDay.getMonth() + 1) + '-' +
                 currentDay.getFullYear() +
                 '">';
-            html += '<div class="tasks-wrapper">'
-            while (tasks[0] && ((tasks[0].day == currentDay.getDate()))) {
-                /*debugger;*/
-                html += buildTask(tasks[counter]);
-                /*counter++;*/
-                tasks.shift();
-            }
-            html += '</div></div>';
+            html += '</div>';
             currentDay.setDate(currentDay.getDate() + 1);
         }
         html += '</div>' +
@@ -127,13 +122,7 @@ var ui = (function () {
         return html;
     }
 
-    // TODO: generate month view
-    function buildMonthView(currentDate, tasks) {
-        return buildMiniMonthView(currentDate, tasks, 'month');
-    }
-
-    // TODO: generate year view
-    function buildYearView(date, tasks) {
+    function buildYearView(date) {
         var currentDate = new Date(date);
         var monthCounter = 0;
         var html = '<div class="table"><div class="caption">' + '</div>';
@@ -142,7 +131,7 @@ var ui = (function () {
                 currentDate.setMonth(monthCounter);
                 html +=
                 '<div class="month">' +
-                  buildMiniMonthView(currentDate, tasks, 'year') +
+                  buildMonthView(currentDate) +
                 '</div>';
                 monthCounter++;
             }
@@ -152,59 +141,29 @@ var ui = (function () {
         return html;
     }
 
-    // TODO: generate agenda view
     function buildAgendaView(tasks) {
-        if(!tasks){
-            tasks = [];
-        }
-        var taskIndex = 0;
-        var currentTask = tasks[0];
+
         var html = '<div class="table">' +
             '<div class="tr">';
         for (var col = 0; col < weekDaysNames.length; col++) {
-            if (tasks[taskIndex]) {
-                var newDate = new Date(currentTask.year, (currentTask.month - 1), currentTask.day);
-                var weekDayIndex = newDate.getDay() - 1;
-                if (weekDayIndex == -1) { weekDayIndex = 6; }
-                html += '<div class="th">' +
-                    weekDaysNames[weekDayIndex].slice(0, 3) + '  ' +
-                    ("0" + currentTask.day).slice(-2) + '.' +    //add leading zero
-                    ("0" + (currentTask.month + 1)).slice(-2) + '.' +       //add leading zero
-                    currentTask.year.toString().slice(-2) +
-                '</div>';
-
-                while (tasks[taskIndex] && (currentTask.day == tasks[taskIndex].day) && (currentTask.month == tasks[taskIndex].month)) {
-                    taskIndex++;
-                }
-                currentTask = tasks[taskIndex];
+            html += '<div class="th">';
+            if(tasks[col]){
+                var className = tasks[col];
+                className = className.replace(/-/g , ".");
+                className = className.substring(0, className.length - 4) + className.slice(-2);
+                html += weekDaysNamesFirstThreeLetters[col] + '  ' + className;
             }
-            else {
-                html += '<div class="th"></div>';
-            }
+            html += '</div>';
         }
         html += '</div>' +
             '<div class="tr">';
-        // add tasks to the table
-        var counter = 0;
-        for (var i = 0; i < weekDaysNames.length; i++) {
-            if (tasks[counter]) {
-                var currentDay = new Date(tasks[counter].year, tasks[counter].month, tasks[counter].day);
-                html += '<div class="td ' +
-                    currentDay.getDate() + '-' +
-                    (currentDay.getMonth() + 1) + '-' +
-                    currentDay.getFullYear() +
-                    '">';
-                html += '<div class="tasks-wrapper">'
-                while (tasks[counter] && (tasks[counter].day == currentDay.getDate()) && (tasks[counter].month == currentDay.getMonth())) {
-                    html += buildTask(tasks[counter]);
-                    counter++;
-                }
 
-                html += '</div></div>';
+        for (var i = 0; i < weekDaysNames.length; i++) {
+            html += '<div class="td ';
+            if(tasks[i]){
+                html += tasks[i];
             }
-            else {
-                html += '<div class="td"></div>';
-            }
+            html += '"></div>';
         }
         html += '</div>' +
         '</div>';
@@ -212,48 +171,42 @@ var ui = (function () {
         return html;
     }
 
-    // TODO: generate mini month view, add class to tasks dates
-    function buildMiniMonthView(date, tasks, idView) {
+    function buildMonthView(date) {
         var currentDate = new Date(date);
-        idView = idView || 'mini';
-        var markTasks = tasks.clone();
-
         currentDate.setDate(1);
+        var curDateDay = currentDate.getDate();
+        var curDateMonth = currentDate.getMonth();
+        var curDateYear = currentDate.getFullYear();
         var weekDay = currentDate.getDay();
         if (weekDay === 0) {
             weekDay = 6;
         }
-        var firstCellDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - weekDay + 1);
+        var firstCellDate = new Date(curDateYear, curDateMonth, curDateDay - weekDay + 1);
 
 
         var html = '<div class="table">' +
             '<div class="caption">' +
-                monthsNames[currentDate.getMonth()] + ' ' + currentDate.getFullYear() +
+                monthsNames[curDateMonth] + ' ' + curDateYear +
             '</div><div class="tr">';
         for (var i = 0; i < weekDaysNames.length; i++) {
-            html += '<div class="th"><p>' + weekDaysNames[i].slice(0, 1) + '</p></div>';
+            html += '<div class="th"><p>' + weekDaysNamesFirstLetter[i] + '</p></div>';
         }
         html += '</div>';
 
         for (var row = 0; row < 6; row++) {
             html += '<div class="tr">';
             for (var col = 0; col < weekDaysNames.length; col++) {
-                var isCurrentMonth = firstCellDate.getMonth() == currentDate.getMonth();
-                html += '<div';
+                var isCurrentMonth = firstCellDate.getMonth() == curDateMonth;
+                var firstCellDateDay = firstCellDate.getDate();
+                var firstCellDateMonth = firstCellDate.getMonth();
+                var firstCellDateYear = firstCellDate.getFullYear();
+
+                html += '<div  ';
                 if (isCurrentMonth) {
                     html += ' class="td mini-current-month mini-month-hover ';
-                    html += firstCellDate.getDate() + '-' + (firstCellDate.getMonth()+1) + '-' + firstCellDate.getFullYear() + ' ';
-                    if(firstCellDate.getDate() == todayDate && firstCellDate.getMonth() == todayMonth && firstCellDate.getFullYear() == todayYear){
+                    html += firstCellDateDay + '-' + (firstCellDateMonth+1) + '-' + firstCellDateYear + ' ';
+                    if(firstCellDateDay == todayDate && firstCellDateMonth == todayMonth && firstCellDateYear == todayYear){
                         html += 'today ';
-                    }
-                    if(true){
-                        /*debugger;*/
-                    }
-                    if(markTasks.length != 0 && ((markTasks[0].month == (firstCellDate.getMonth())) && (markTasks[0].day == firstCellDate.getDate()))){
-                        html += 'got-task';
-                        while (markTasks.length != 0 && ((markTasks[0].month == (firstCellDate.getMonth())) && (markTasks[0].day == firstCellDate.getDate()))) {
-                            markTasks.shift();
-                        }
                     }
                 }
                 else {
@@ -261,18 +214,9 @@ var ui = (function () {
                 }
 
                 html += '"><p>' + firstCellDate.getDate() + '</p>';
-                /*debugger;*/
-                if (idView == 'month') {
-                    html += '<div class="tasks-wrapper">';
-                    while (tasks.length != 0 && ((tasks[0].month == (firstCellDate.getMonth())) && (tasks[0].day == firstCellDate.getDate()))) {
-                        html += buildTask(tasks[0]);
-                        tasks.shift();
-                    }
-                    html += '</div>';
-                }
 
                 html += '</div>';
-                firstCellDate.setDate(firstCellDate.getDate() + 1);
+                firstCellDate.setDate(firstCellDateDay + 1);
             }
 
             html += '</div>';
@@ -289,7 +233,6 @@ var ui = (function () {
         buildMonthView: buildMonthView,
         buildYearView: buildYearView,
         buildAgendaView: buildAgendaView,
-        buildMiniMonthView: buildMiniMonthView,
         buildTask: buildTask
     }
 }());

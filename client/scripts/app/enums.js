@@ -23,12 +23,25 @@ var weekDaysNames = [
     "Sunday"
 ];
 
-var Priority = {
-    "0":"low",
-    "1":"medium",
-    "2":"high",
-    "3":"critical"
-};
+var weekDaysNamesFirstLetter = [
+    "M",
+    "T",
+    "W",
+    "T",
+    "F",
+    "S",
+    "S"
+];
+
+var weekDaysNamesFirstThreeLetters = [
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat",
+    "Sun"
+];
 
 var CategoryType = {
     "0": "Home",

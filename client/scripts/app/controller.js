@@ -15,6 +15,7 @@ var myControllers = (function () {
             this.persister = persisters.get();
             this.todayDate = new Date();
             this.agendaCurrentDate = new Date();
+            this.agendaFutureDate = new Date();
 
             this.agendaViewId = '#agenda-view';
             this.weekViewId = '#week-view';
@@ -25,7 +26,8 @@ var myControllers = (function () {
         loadUI: function (selector) {
             this.loadStaticHtml(selector);
             this.loadMiniMonthView(this.miniMonthViewId, this.todayDate);
-            this.loadAgendaView(this.agendaViewId, this.todayDate);
+            this.loadWeekView(this.weekViewId, this.todayDate);
+
             this.attachUIEventHandlers(selector);
         },
         loadStaticHtml: function (selector) {
@@ -38,6 +40,12 @@ var myControllers = (function () {
 
             var currentDate = new Date(this.todayDate);
             var currentDateMini = new Date(this.todayDate);
+
+            function getActiveTabId(){
+                var activeTabIndex = $j('#tabs').tabs('option','active');
+                var activeTabID = $j('#tabs > ul > li').eq(activeTabIndex).attr('aria-controls');
+                return '#' + activeTabID;
+            }
 
             wrapper.on('click', '#mini-previous-button', function () {
                 $j(self.miniMonthViewId).empty();
@@ -121,161 +129,142 @@ var myControllers = (function () {
             });
             wrapper.on('click', '#ui-id-1', function(){
                 $j('.views').empty();
-                self.loadAgendaView(self.agendaViewId, self.todayDate);
-                self.loadMiniMonthView(self.miniMonthViewId, self.todayDate);
+                self.loadAgendaView(self.agendaViewId, self.todayDate, true);
             });
             wrapper.on('click', '#ui-id-2', function(){
                 $j('.views').empty();
                 self.loadWeekView(self.weekViewId, self.todayDate);
-                self.loadMiniMonthView(self.miniMonthViewId, self.todayDate);
             });
             wrapper.on('click', '#ui-id-3', function(){
                 $j('.views').empty();
                 self.loadMonthView(self.monthViewId, self.todayDate);
-                self.loadMiniMonthView(self.miniMonthViewId, self.todayDate);
             });
             wrapper.on('click', '#ui-id-4', function(){
                 $j('.views').empty();
                 self.loadYearView(self.yearViewId, self.todayDate);
-                self.loadMiniMonthView(self.miniMonthViewId, self.todayDate);
             });
             wrapper.on('click', '#previous-button', function () {
-                var activeTabIndex = $j('#tabs').tabs('option','active');
-                var activeTabID = $j('#tabs > ul > li').eq(activeTabIndex).attr('aria-controls');
+                var activeTabID = getActiveTabId();
 
-                if('#' + activeTabID === self.agendaViewId){
-                    self.loadAgendaView(self.agendaViewId, currentDate);
+                if(activeTabID === self.agendaViewId){
+                    self.loadAgendaView(self.agendaViewId, self.agendaCurrentDate, false);
                 }
-                else if('#' + activeTabID === self.weekViewId){
+                else if(activeTabID === self.weekViewId){
                     currentDate.setDate(currentDate.getDate() - 7);
                     self.loadWeekView(self.weekViewId, currentDate);
                 }
-                else if('#' + activeTabID === self.monthViewId){
+                else if(activeTabID === self.monthViewId){
                     currentDate.setMonth(currentDate.getMonth() - 1);
                     self.loadMonthView(self.monthViewId, currentDate);
                 }
-                else if('#' + activeTabID === self.yearViewId){
+                else if(activeTabID === self.yearViewId){
                     currentDate.setFullYear(currentDate.getFullYear() - 1);
                     self.loadYearView(self.yearViewId, currentDate);
                 }
             });
             wrapper.on('click', '#next-button', function () {
-                var activeTabIndex = $j('#tabs').tabs('option','active');
-                var activeTabID = $j('#tabs > ul > li').eq(activeTabIndex).attr('aria-controls');
-
-                if('#' + activeTabID === self.agendaViewId){
-                    self.loadAgendaView(self.agendaViewId, self.agendaCurrentDate); // TODO: agendaCurrentDate!!!
+                var activeTabID = getActiveTabId();
+                debugger;
+                if(activeTabID === self.agendaViewId){
+                    self.loadAgendaView(self.agendaViewId, self.agendaFutureDate, true);
                 }
-                else if('#' + activeTabID === self.weekViewId){
+                else if(activeTabID === self.weekViewId){
                     currentDate.setDate(currentDate.getDate() + 7);
                     self.loadWeekView(self.weekViewId, currentDate);
                 }
-                else if('#' + activeTabID === self.monthViewId){
+                else if(activeTabID === self.monthViewId){
                     currentDate.setMonth(currentDate.getMonth() + 1);
                     self.loadMonthView(self.monthViewId, currentDate);
                 }
-                else if('#' + activeTabID === self.yearViewId){
+                else if(activeTabID === self.yearViewId){
                     currentDate.setFullYear(currentDate.getFullYear() + 1);
                     self.loadYearView(self.yearViewId, currentDate);
                 }
             });
             wrapper.on('click', '#today-button', function () {
-                var activeTabIndex = $j('#tabs').tabs('option','active');
-                var activeTabID = $j('#tabs > ul > li').eq(activeTabIndex).attr('aria-controls');
+                var activeTabID = getActiveTabId();
                 currentDate = new Date();
 
-                if('#' + activeTabID === self.agendaViewId){
-                    self.loadAgendaView(self.agendaViewId, currentDate);
+                if(activeTabID === self.agendaViewId){
+                    self.loadAgendaView(self.agendaViewId, currentDate,true);
                 }
-                else if('#' + activeTabID === self.weekViewId){
+                else if(activeTabID === self.weekViewId){
                     self.loadWeekView(self.weekViewId, currentDate);
                 }
-                else if('#' + activeTabID === self.monthViewId){
+                else if(activeTabID === self.monthViewId){
                     self.loadMonthView(self.monthViewId, currentDate);
                 }
-                else if('#' + activeTabID === self.yearViewId){
+                else if(activeTabID === self.yearViewId){
                     self.loadYearView(self.yearViewId, currentDate);
                 }
             });
             wrapper.on('click', '#mobile-menu-button',function(){
                 $j('#menu').toggle('blind', {direction: "up"});
                 $j('.ui-tabs-nav').toggle();
+
             });
             $j(function () {
-                $j("#tabs").tabs({
-                });
+                $j("#tabs").tabs({ active: 1 });
             });
+            //create task
             $j( '#dialog' ).on('click', '#form-submit-button', function() {
                 var task = self.getFormData();
+                var activeTabID = getActiveTabId();
+
                 self.persister.addTask(task, function(data){
                     var taskClass  = data.day + '-' + data.month + '-' + data.year;
-                    $j('.' + taskClass + ' .tasks-wrapper').append(ui.buildTask(data));
+                    if(activeTabID != self.yearViewId){
+                        $j('.' + taskClass).append(ui.buildTask([data]));
+                    }
+                    if(activeTabID == self.agendaViewId){
+                        self.loadAgendaView(self.agendaViewId, self.agendaCurrentDate, true);
+                    }
+                    $j('.' + taskClass).addClass('got-task');
                 });
                 $j( '#dialog' ).dialog( 'close' );
-                self.loadMiniMonthView(self.miniMonthViewId, self.todayDate);
             });
             //save (edit task)
             $j( '#dialog' ).on('click', '#form-save-button', function() {
+                var activeTabID = getActiveTabId();
                 var task = self.getFormData();
                 var id = $j(this).attr('class');
-                debugger;
+
                 self.persister.editTask(task, id, function(data){
-                    debugger;
                     var taskClass  = data.day + '-' + data.month + '-' + data.year;
                     $j('#' + id).remove();
-                    $j('.' + taskClass + ' .tasks-wrapper').append(ui.buildTask(data));
+                    $j('.' + taskClass).append(ui.buildTask([data]));
+                    if(activeTabID == self.agendaViewId){
+                        self.loadAgendaView(self.agendaViewId, self.agendaCurrentDate, true);
+                    }
                 });
                 $j( '#dialog' ).dialog( 'close' );
             });
             //delete
             $j( '#dialog' ).on('click', '#form-delete-button', function() {
+                var activeTabID = getActiveTabId();
                 var id = $j(this).attr('class');
                 self.persister.deleteTask(id, function(){
                     $j('#' + id).remove();
                     self.loadMiniMonthView(self.miniMonthViewId, self.todayDate);
+                    if(activeTabID == self.agendaViewId){
+                        self.loadAgendaView(self.agendaViewId, self.agendaCurrentDate, true);
+                    }
                 });
                 $j( '#dialog' ).dialog( 'close' );
             });
             wrapper.on('click', '.task-close-button', function(e) {
-                debugger;
+                var activeTabID = getActiveTabId();
                 var id = $j(this).parent().attr('id');
+
                 self.persister.deleteTask(id, function(){
-                    debugger;
                     $j('#' + id).remove();
                     self.loadMiniMonthView(self.miniMonthViewId, self.todayDate);
+                    if(activeTabID == self.agendaViewId){
+                        self.loadAgendaView(self.agendaViewId, self.agendaCurrentDate, true);
+                    }
                 });
                 e.stopPropagation();
             });
-
-
-
-            /*$j('.tasks').addClass('ui-widget-content');
-            console.log($j('.tasks').length);
-
-            $j(function() {
-                $j('.tasks').draggable({
-                    helper: "clone",
-                    cursor: "crosshair"
-                });
-            });*/
-
-            /*$j(function() {
-                $j('.tasks').draggable();
-            });*/
-
-            //TODO: draggable and droppable
-            /*$j('div.tasks').draggable();
-             $j('div.td').droppable({
-             accept: "div.tasks"
-             });*/
-
-            /*
-             connectToSortable
-             opacity: 0.35
-             scope
-
-            */
-
         },
         getFormData: function(){
             var form = $j('#create-task-form');
@@ -294,56 +283,85 @@ var myControllers = (function () {
         loadMiniMonthView: function (selector, date) {
             var self = this;
             this.persister.requestTasksByMonth(date, function (data) {
-                data.forEach(function(element){
-                    element.month -= 1;
-                });
-                var miniMonthViewHtml = ui.buildMiniMonthView(date, data);
+                var miniMonthViewHtml = ui.buildMonthView(date);
                 $j(selector).html(miniMonthViewHtml);
                 $j(self.miniMonthViewId).prepend('<input type="button" value=">" id="mini-next-button" class="mini-buttons">');
                 $j(self.miniMonthViewId).prepend('<input type="button" value="<" id="mini-previous-button" class="mini-buttons">');
+                self.addGotTaskClass(data);
             });
         },
-        loadAgendaView: function (selector, date) {
+        loadAgendaView: function (selector, date, futureTasksBool) {
             var self = this;
-            this.persister.requestTasksByAgenda(date, function (data) {
-                data.forEach(function(element){
-                    element.month -= 1;
-                });
-                var agendaViewHtml = ui.buildAgendaView(data);
-                var lastTask = data[data.length - 1];
-                if(data.length > 0){
-                    self.agendaCurrentDate = new Date(lastTask.year, lastTask.month, lastTask.day);
+            this.persister.requestTasksByAgenda(date, futureTasksBool, function (data) {
+                var dateStr =_.keys(data);
+                if(dateStr.length > 0){
+                    var lastDay = dateStr[dateStr.length - 1];
+                    var splitedLastDay = lastDay.split('-');
+                    self.agendaFutureDate = new Date(parseInt(splitedLastDay[2]), parseInt(splitedLastDay[1]) - 1, parseInt(splitedLastDay[0]));
+                    self.agendaFutureDate.setDate(self.agendaFutureDate.getDate() + 1);
+
+                    var firstDay = dateStr[0];
+                    var splitedFirstDay = firstDay.split('-');
+                    self.agendaCurrentDate = new Date(parseInt(splitedFirstDay[2]), parseInt(splitedFirstDay[1]) - 1, parseInt(splitedFirstDay[0]));
                 }
+                var agendaViewHtml = ui.buildAgendaView(dateStr);
                 $j(selector).html(agendaViewHtml);
+                self.appendAgendaTasks(data);
             });
+        },
+        appendAgendaTasks: function (groupedTasks){
+            for(var day in groupedTasks){
+                var dateCell = $j('.' + day);
+                dateCell.append(ui.buildTask(groupedTasks[day]));
+            }
         },
         loadWeekView: function (selector, date) {
+            var self = this;
             this.persister.requestTasksByWeek(date, function (data) {
-                data.forEach(function(element){
-                    element.month -= 1;
-                });
-                var weekViewHtml = ui.buildWeekView(date, data);
+                var weekViewHtml = ui.buildWeekView(date);
                 $j(selector).html(weekViewHtml);
+                self.appendTasks(data);
             });
         },
         loadMonthView: function (selector, date) {
+            var self = this;
             this.persister.requestTasksByMonth(date, function (data) {
-                data.forEach(function(element){
-                    element.month -= 1;
-                });
-                var monthViewHtml = ui.buildMonthView(date, data);
+                var monthViewHtml = ui.buildMonthView(date);
                 $j(selector).html(monthViewHtml);
+                self.appendTasks(data);
             });
         },
         loadYearView: function (selector, date) {
+            var self = this;
             this.persister.requestTasksByYear(date, function (data) {
-                console.log(data.length);
-                data.forEach(function(element){
-                    element.month -= 1;
-                });
-                var yearViewHtml = ui.buildYearView(date, data);
+                var yearViewHtml = ui.buildYearView(date);
                 $j(selector).html(yearViewHtml);
+                self.addGotTaskClass(data);
             });
+        },
+        appendTasks: function (data){
+            if(data.length > 0){
+                var groupedTasks = _.groupBy(data, 'day');
+
+                for(var day in groupedTasks){
+                    var firstTask = groupedTasks[day][0];
+                    var month = firstTask.month;
+                    var year = firstTask.year;
+                    var taskClass = day + '-' + month + '-' + year;
+                    var dateCell = $j('.' + taskClass);
+                    dateCell.append(ui.buildTask(groupedTasks[day]));
+                }
+            }
+        },
+        addGotTaskClass: function (data){
+            for (var i = 0; i < data.length; i++)
+            {
+                var curTask = data[i];
+                var taskClass = curTask.day + '-' + curTask.month + '-' + curTask.year;
+                var dateCell = $j('.' + taskClass);
+
+                dateCell.addClass('got-task');
+            }
         }
     });
 

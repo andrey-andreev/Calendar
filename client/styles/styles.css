@@ -292,12 +292,11 @@ body {
       #wrapper #calendar #tabs #month-view div.table div.tr .mini-current-month:nth-of-type(6), #wrapper #calendar #tabs #month-view div.table div.tr .mini-current-month:nth-of-type(7) {
         color: #f26522; }
       #wrapper #calendar #tabs #month-view div.table div.tr div.today {
-        background-color: rgba(153, 153, 153, 0.5);
         background-color: rgba(62, 69, 76, 0.5);
         color: #efefef; }
     #wrapper #calendar #tabs #month-view div.table div.mini-other-month {
       color: #efefef; }
-    #wrapper #calendar #tabs #month-view div.table div:nth-of-type(2) {
+    #wrapper #calendar #tabs #month-view div.table > div:nth-of-type(2) {
       height: 4%; }
     #wrapper #calendar #year-view {
       color: #3e454c;
