@@ -64,7 +64,7 @@ var ui = (function () {
         if (weekDay === 0) {
             weekDay = 6;
         }
-        monday.setDate(currentDate.getDate() - weekDay);
+        monday.setDate(currentDate.getDate() - weekDay + 1);
 
         return monday;
     }
